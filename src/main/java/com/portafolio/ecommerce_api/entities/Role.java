@@ -1,6 +1,18 @@
-package com.portafolio.ecommerce_api.ecommerce_api.entities;
+package com.portafolio.ecommerce_api.entities;
 
-public enum Rol {
-    ROLE_USER,
-    ROLE_ADMIN
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+@Entity
+@Table(name = "roles")
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 60)
+    private String name;
 }

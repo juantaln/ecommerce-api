@@ -1,5 +1,9 @@
 package com.portafolio.ecommerce_api.dto;
 
-public class OrderItemDto {
+import lombok.Data;
 
+@Data
+public class OrderItemDto {
+    private Long productId;
+    private Integer quantity;
 }

@@ -1,5 +1,9 @@
 package com.portafolio.ecommerce_api.dto;
 
-public class LoginDto {
+import lombok.Data;
 
+@Data
+public class LoginDto {
+    private String username;
+    private String password;
 }

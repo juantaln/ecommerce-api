@@ -1,5 +1,13 @@
 package com.portafolio.ecommerce_api.dto;
 
-public class ProductDto {
+import lombok.Data;
+import java.math.BigDecimal;
 
+@Data
+public class ProductDto {
+    private Long id;
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private Integer stock;
 }
