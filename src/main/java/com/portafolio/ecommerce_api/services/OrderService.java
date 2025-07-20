@@ -5,6 +5,8 @@ import com.portafolio.ecommerce_api.entities.*;
 import com.portafolio.ecommerce_api.repositories.OrderRepository;
 import com.portafolio.ecommerce_api.repositories.ProductRepository;
 import com.portafolio.ecommerce_api.repositories.UserRepository;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +24,14 @@ public class OrderService {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PaymentService paymentService;
+    @Autowired
+    private EmailService emailService; // <-- 1. INYECTAR EL SERVICIO DE EMAIL
 
-    @Transactional 
+    @Transactional(rollbackFor = Exception.class)
     public Order createOrder(OrderDto orderDto, String username) {
-        
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -37,13 +43,24 @@ public class OrderService {
 
         for (var itemDto : orderDto.getItems()) {
             Product product = productRepository.findById(itemDto.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado: ID " + itemDto.getProductId()));
 
-          
             if (product.getStock() < itemDto.getQuantity()) {
                 throw new RuntimeException("Stock insuficiente para el producto: " + product.getName());
             }
 
+            totalPrice = totalPrice.add(product.getPrice().multiply(new BigDecimal(itemDto.getQuantity())));
+        }
+
+        try {
+            PaymentIntent paymentIntent = paymentService.createPaymentIntent(totalPrice);
+            System.out.println("Intención de pago creada exitosamente: " + paymentIntent.getId());
+        } catch (StripeException e) {
+            throw new RuntimeException("Error al procesar el pago con Stripe: " + e.getMessage(), e);
+        }
+
+        for (var itemDto : orderDto.getItems()) {
+            Product product = productRepository.findById(itemDto.getProductId()).get();
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setQuantity(itemDto.getQuantity());
@@ -51,17 +68,18 @@ public class OrderService {
             orderItem.setOrder(order);
             orderItems.add(orderItem);
 
-         
             product.setStock(product.getStock() - itemDto.getQuantity());
             productRepository.save(product);
-
-        
-            totalPrice = totalPrice.add(product.getPrice().multiply(new BigDecimal(itemDto.getQuantity())));
         }
 
         order.setItems(orderItems);
         order.setTotalPrice(totalPrice);
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        
+        emailService.sendOrderConfirmationEmail(savedOrder);
+
+        return savedOrder;
     }
 }
