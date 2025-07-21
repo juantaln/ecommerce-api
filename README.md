@@ -1,43 +1,53 @@
-# E-commerce API con Spring Boot
+# E-commerce API con Spring Boot y Funcionalidades Avanzadas
 
-Backend para una aplicación de e-commerce simple, desarrollada con Java y Spring Boot. La API gestiona productos, usuarios con roles (ADMIN/USER) y un flujo transaccional para la creación de pedidos. La seguridad está implementada con Spring Security y JSON Web Tokens (JWT).
+Este es el backend para una aplicación de e-commerce, desarrollado con Java y Spring Boot. La API gestiona productos, usuarios con roles y un flujo transaccional completo que incluye una pasarela de pagos con Stripe y notificaciones por email.
 
-### Tecnologías Utilizadas
-* Java 17
-* Spring Boot
-* Spring Security (con autorización por roles)
-* Spring Data JPA (con relaciones ManyToMany)
-* JWT (JSON Web Tokens)
-* MySQL
-* Lombok & Maven
+### 🚀 Demo en Vivo
 
-### Features
-* **Gestión de Productos (CRUD):** Los administradores pueden crear, leer, actualizar y eliminar productos.
-* **Autenticación de Usuarios:** Registro y Login para usuarios.
-* **Autorización por Roles:**
-    * **Admins:** Gestionan productos.
-    * **Usuarios:** Pueden ver productos y crear pedidos.
-* **Creación de Pedidos:** Endpoint transaccional que valida el stock de productos y actualiza el inventario al crear un pedido.
+La API está desplegada y completamente funcional en la siguiente URL. ¡Puedes probarla usando Postman!
 
-### Cómo Ejecutar Localmente
-1.  Clonar el repositorio: `git clone <tu-url-de-github>`
-2.  Crear una base de datos en MySQL llamada `ecommerce_db`.
-3.  El archivo `data.sql` creará los roles `ROLE_USER` y `ROLE_ADMIN` automáticamente al iniciar.
-4.  Actualizar el archivo `src/main/resources/application.properties` con tus credenciales de MySQL.
-5.  Ejecutar el proyecto.
+**URL Base:** `https://ecommerce-api-8ujg.onrender.com` *(<-- Reemplaza esto con tu URL de Render)*
 
-### Endpoints de la API
+---
 
-#### Autenticación (Público)
-* `POST /api/auth/register`: Registra un nuevo usuario (con rol `ROLE_USER` por defecto).
-* `POST /api/auth/login`: Autentica un usuario y devuelve un token JWT.
+### 🛠️ Tecnologías Utilizadas
 
-#### Productos
-* `GET /api/products`: Obtiene todos los productos (Público).
-* `GET /api/products/{id}`: Obtiene un producto por ID (Público).
-* `POST /api/products`: Crea un producto (Solo ADMIN).
-* `PUT /api/products/{id}`: Actualiza un producto (Solo ADMIN).
-* `DELETE /api/products/{id}`: Elimina un producto (Solo ADMIN).
+* **Lenguaje:** Java 17
+* **Framework:** Spring Boot 3
+* **Seguridad:** Spring Security (Autenticación con JWT)
+* **Base de Datos:** Spring Data JPA (Hibernate) con PostgreSQL
+* **Pasarela de Pagos:** Stripe
+* **Notificaciones:** Spring Boot Mail (envío asíncrono)
+* **Contenerización:** Docker
+* **Despliegue:** Render
 
-#### Pedidos (Protegido)
-* `POST /api/orders`: Crea un nuevo pedido para el usuario autenticado (USER o ADMIN).
+---
+
+### ✨ Features
+
+* **Gestión de Productos (CRUD):** Endpoints para crear, leer, actualizar y eliminar productos (protegido para rol `ADMIN`).
+* **Autenticación y Autorización:** Registro y Login de usuarios con JWT. Rutas protegidas por roles (`USER`, `ADMIN`).
+* **Integración con Stripe:** El flujo de creación de pedidos genera una intención de pago en Stripe antes de confirmar la orden.
+* **Notificaciones Asíncronas:** Envío de un correo de confirmación de compra en segundo plano para no afectar el tiempo de respuesta de la API.
+* **Despliegue en la Nube:** La aplicación está completamente contenerizada con Docker y desplegada en una plataforma como servicio (Render) con una base de datos externa.
+
+---
+
+### ⚙️ Endpoints de la API
+
+#### Autenticación (`/api/auth`)
+
+* `POST /register`: Registra un nuevo usuario (con rol `USER` por defecto).
+* `POST /login`: Autentica un usuario y devuelve un token JWT.
+
+#### Productos (`/api/products`)
+
+* `GET /`: Obtiene todos los productos (Público).
+* `GET /{id}`: Obtiene un producto por ID (Público).
+* `POST /`: Crea un nuevo producto (Solo `ADMIN`).
+* `PUT /{id}`: Actualiza un producto existente (Solo `ADMIN`).
+* `DELETE /{id}`: Elimina un producto (Solo `ADMIN`).
+
+#### Pedidos (`/api/orders`)
+
+* `POST /`: Crea un nuevo pedido para el usuario autenticado (requiere token).
