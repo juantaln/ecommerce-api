@@ -14,10 +14,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Este código se ejecuta una vez que la aplicación ha arrancado
-        // y la base de datos está completamente lista.
-
-        // Crear ROLE_USER si no existe
+      
         if (roleRepository.findByName("ROLE_USER").isEmpty()) {
             Role userRole = new Role();
             userRole.setName("ROLE_USER");
@@ -25,7 +22,7 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Rol ROLE_USER creado.");
         }
 
-        // Crear ROLE_ADMIN si no existe
+        
         if (roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
             Role adminRole = new Role();
             adminRole.setName("ROLE_ADMIN");
