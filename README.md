@@ -54,5 +54,5 @@ La API está desplegada y completamente funcional en la siguiente URL. ¡Puedes 
 
 ---
 **Nota sobre el Despliegue Gratuito:**
-Esta API está desplegada en el plan gratuito de Render. Si es la primera vez que la usas después de un tiempo, la primera petición puede tardar hasta un minuto en responder mientras el servidor se "despierta". ¡Ten paciencia! Las peticiones siguientes serán instantáneas.
+Esta API está desplegada en el plan gratuito de Render. Si es la primera vez que la usas después de un tiempo, la primera petición puede tardar hasta un minuto en responder mientras el servidor se "despierta". ¡Ten paciencia! Las peticiones siguientes serán instantáneas
 ---
