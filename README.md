@@ -51,3 +51,8 @@ La API está desplegada y completamente funcional en la siguiente URL. ¡Puedes 
 #### Pedidos (`/api/orders`)
 
 * `POST /`: Crea un nuevo pedido para el usuario autenticado (requiere token).
+
+---
+**Nota sobre el Despliegue Gratuito:**
+Esta API está desplegada en el plan gratuito de Render. Si es la primera vez que la usas después de un tiempo, la primera petición puede tardar hasta un minuto en responder mientras el servidor se "despierta". ¡Ten paciencia! Las peticiones siguientes serán instantáneas.
+---
