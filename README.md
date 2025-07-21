@@ -6,7 +6,7 @@ Este es el backend para una aplicación de e-commerce, desarrollado con Java y S
 
 La API está desplegada y completamente funcional en la siguiente URL. ¡Puedes probarla usando Postman!
 
-**URL Base:** `https://ecommerce-api-8ujg.onrender.com` *(<-- Reemplaza esto con tu URL de Render)*
+**URL Base:** `https://ecommerce-api-8ujg.onrender.com` 
 
 ---
 
